@@ -139,48 +139,8 @@ return {
           end,
         },
       },
-      lualine_b = {
-        "branch",
-        "diff",
-        {
-          "diagnostics",
-          sources = { "nvim_diagnostic" },
-          sections = { "error", "warn", "info", "hint" },
-          symbols = {
-            error = "● ",
-            warn = "▲ ",
-            info = "◆ ",
-            hint = "▪ ",
-          },
-          colored = true, -- 用 Diagnostic 颜色染色
-        },
-      },
-      lualine_c = {
-        {
-          "filename",
-          file_status = true, -- 显示 [+] [-] [✗] 标记
-          newfile_status = true,
-          path = 1, -- 相对路径（相对于 cwd）
-          shorting_target = 40,
-          symbols = {
-            modified = "[+]",
-            readonly = "[r]",
-            unnamed = "[No Name]",
-            newfile = "[n]",
-          },
-        },
-        {
-          function()
-            -- 宏录制指示器
-            local reg = vim.fn.reg_recording()
-            if reg ~= "" then
-              return "⏺ REC @" .. reg
-            end
-            return ""
-          end,
-          color = { fg = red, bold = true },
-        },
-      },
+      lualine_b = {},
+      lualine_c = {},
       lualine_x = {
         {
           function()
@@ -255,7 +215,7 @@ return {
       lualine_c = {},
       lualine_x = {},
       lualine_y = {},
-      lualine_z = {},
+      lualine_z = { "branch" },
     }
 
     -- ╔══════════════════════════════════════════════════════════════╗
@@ -273,11 +233,11 @@ return {
           },
         },
       },
-      lualine_b = { "branch" },
+      lualine_b = {},
       lualine_c = {},
       lualine_x = {},
       lualine_y = {},
-      lualine_z = { "tabs" },
+      lualine_z = { "branch" },
     }
 
     -- ╔══════════════════════════════════════════════════════════════╗

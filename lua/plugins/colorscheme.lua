@@ -38,7 +38,7 @@ return {
 
         -- 中性色 · Neutral tones
         dark = "#222222", -- 深灰 / 字符串
-        subtle = "#dcdddd", -- 浅灰 / 分隔线 / inlay-hint
+        subtle = "#a0aaaa", -- 浅灰 / 分隔线 / inlay-hint
 
         -- 诊断语义色 · Diagnostic semantic colors
         red = "#f7768e", -- 柔玫红 / Error
@@ -699,7 +699,7 @@ return {
 
       local function update_sel_highlights()
         local mode = vim.fn.mode()
-        local bg = mode_sel[mode] or "#ffee99"
+        local bg = mode_sel[mode] or "#288002"
         local fg = "#222222"
 
         -- 文本选区 / 搜索匹配
