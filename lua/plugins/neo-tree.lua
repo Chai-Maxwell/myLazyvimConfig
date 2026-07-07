@@ -43,10 +43,7 @@ return {
                 return
               end
               -- macOS: use osascript to move file/folder to trash
-              local trash_cmd = { "osascript", "-e", string.format(
-                'tell app "Finder" to delete POSIX file %q',
-                path
-              ) }
+              local trash_cmd = { "osascript", "-e", string.format('tell app "Finder" to delete POSIX file %q', path) }
               vim.fn.jobstart(trash_cmd, {
                 detach = true,
                 on_exit = function()
@@ -57,7 +54,24 @@ return {
           end,
         },
       },
+      source_selector = {
+        winbar = true,
+        separator = "┃", -- 加粗分隔符（filesystem / buffers / git_status 之间）
+        separator_active = "┃",
+        show_separator_on_edge = true,
+      },
       event_handlers = {
+        {
+          event = "neo_tree_window_after_open",
+          handler = function()
+            -- neo-tree 左边栏边框加粗：设置 WinSeparator 为粗体高亮
+            vim.api.nvim_set_hl(0, "NeoTreeWinSeparator", {
+              bold = true,
+              fg = "#a1551a",
+            })
+            vim.wo.winhighlight = "WinSeparator:NeoTreeWinSeparator"
+          end,
+        },
         {
           event = "file_open_requested",
           handler = function(args)

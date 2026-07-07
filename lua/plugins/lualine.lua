@@ -206,7 +206,7 @@ return {
       lualine_c = {},
       lualine_x = {},
       lualine_y = {},
-      lualine_z = {},
+      lualine_z = { "branch" },
     }
 
     opts.inactive_winbar = {
@@ -219,26 +219,26 @@ return {
     }
 
     -- ╔══════════════════════════════════════════════════════════════╗
-    -- ║  【6. tabline】标签栏                                        ║
+    -- ║  【6. tabline】标签栏（已关闭）                              ║
     -- ╚══════════════════════════════════════════════════════════════╝
-    opts.tabline = {
-      lualine_a = {
-        {
-          "buffers",
-          mode = 2,
-          symbols = {
-            modified = " ●",
-            alternate_file = "",
-            directory = "📁",
-          },
-        },
-      },
-      lualine_b = {},
-      lualine_c = {},
-      lualine_x = {},
-      lualine_y = {},
-      lualine_z = { "branch" },
-    }
+    -- opts.tabline = {
+    --   lualine_a = {
+    --     {
+    --       "buffers",
+    --       mode = 2,
+    --       symbols = {
+    --         modified = " ●",
+    --         alternate_file = "",
+    --         directory = "📁",
+    --       },
+    --     },
+    --   },
+    --   lualine_b = {},
+    --   lualine_c = {},
+    --   lualine_x = {},
+    --   lualine_y = {},
+    --   lualine_z = { "branch" },
+    -- }
 
     -- ╔══════════════════════════════════════════════════════════════╗
     -- ║  【7. separators】分段符                                     ║
