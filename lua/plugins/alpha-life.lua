@@ -51,6 +51,7 @@ return {
         { key = "e", text = "  New file", cmd = "<cmd>ene<CR>" },
         { key = "f", text = "  Find file", cmd = "<cmd>Telescope find_files<CR>" },
         { key = "r", text = "  Recent files", cmd = "<cmd>Telescope oldfiles<CR>" },
+        { key = "p", text = "  Projects", cmd = "<cmd>Telescope project<CR>" },
         { key = "c", text = "  Config", cmd = "<cmd>Telescope find_files cwd=~/.config/nvim<CR>" },
         { key = "q", text = "  Quit", cmd = "<cmd>qa<CR>" },
       },
