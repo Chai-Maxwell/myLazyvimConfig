@@ -36,7 +36,7 @@ return {
         org_hide_leading_stars = true,
         org_hide_emphasis_markers = true,
         org_startup_indented = true,
-        org_startup_folded = "overview",
+        org_startup_folded = "content",
         org_ellipsis = "…",
         org_highlight_latex_and_related = "entities",
         org_log_done = "time",
@@ -60,7 +60,7 @@ return {
             },
           },
           d = {
-            description = "今日待办（agenda + 所有 TODO）",
+            description = "Today Tasks",
             types = {
               { type = "agenda", org_agenda_span = "day" },
               { type = "todo" },

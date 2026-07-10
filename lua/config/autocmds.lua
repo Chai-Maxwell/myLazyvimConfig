@@ -13,6 +13,62 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function()
     local bufnr = vim.api.nvim_get_current_buf()
     local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+    -- ============================================================
+    -- Step 1: figure[(path)(caption)[(size)]] → <figure> HTML
+    --   Runs on full buffer text (1 line shorthand → 4 lines HTML)
+    -- ============================================================
+    local text = table.concat(lines, "\n")
+    local figure_modified = false
+
+    local function normalize_size(s)
+      s = s:match("^%s*(.-)%s*$") -- trim
+      if s == "" then return nil end
+      s = s:gsub("%%$", "") -- strip %, re-add in format
+      return s
+    end
+
+    -- 3-arg: figure[(path)(caption)(size)]
+    local new_text, n3 = text:gsub(
+      "figure%[%(([^)]*)%)%(([^)]*)%)%(([^)]*)%)%]",
+      function(path, caption, size)
+        figure_modified = true
+        size = normalize_size(size)
+        if size then
+          return string.format(
+            '<figure class="image-round" style="--image-width:%s%%">\n  <img src="%s">\n  <figcaption>%s</figcaption>\n</figure>',
+            size, path, caption
+          )
+        else
+          return string.format(
+            '<figure class="image-round">\n  <img src="%s">\n  <figcaption>%s</figcaption>\n</figure>',
+            path, caption
+          )
+        end
+      end
+    )
+    if n3 > 0 then text = new_text end
+
+    -- 2-arg: figure[(path)(caption)]
+    local new_text2, n2 = text:gsub(
+      "figure%[%(([^)]*)%)%(([^)]*)%)%]",
+      function(path, caption)
+        figure_modified = true
+        return string.format(
+          '<figure class="image-round">\n  <img src="%s">\n  <figcaption>%s</figcaption>\n</figure>',
+          path, caption
+        )
+      end
+    )
+    if n2 > 0 then text = new_text2; figure_modified = true end
+
+    if figure_modified then
+      lines = vim.split(text, "\n", { plain = true })
+    end
+
+    -- ============================================================
+    -- Step 2: KaTeX macro substitution (line-by-line)
+    -- ============================================================
     local new_lines = {}
     local in_code_block = false
 
@@ -66,6 +122,11 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, new_lines)
   end,
 })
+
+-- 用 macOS 访达打开当前工作文件夹
+vim.api.nvim_create_user_command("OpenInFolder", function()
+  vim.fn.jobstart({ "open", vim.fn.getcwd() }, { detach = true })
+end, {})
 
 -- 图片文件 → 交给 macOS 预览.app 打开，终端和 Neovide 通用
 -- （与 neo-tree 中 PDF 的处理方式一致）

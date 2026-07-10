@@ -43,36 +43,24 @@ return {
         vim.log.levels.INFO
       )
 
-      local output = vim.fn.system(
-        "cd " .. vim.fn.shellescape(plugin_dir)
-          .. " && npm install --production --legacy-peer-deps 2>&1"
-      )
+      local output =
+        vim.fn.system("cd " .. vim.fn.shellescape(plugin_dir) .. " && npm install --production --legacy-peer-deps 2>&1")
       if vim.v.shell_error ~= 0 then
-        vim.notify(
-          "markdown-preview: npm install 失败\n" .. output,
-          vim.log.levels.ERROR
-        )
+        vim.notify("markdown-preview: npm install 失败\n" .. output, vim.log.levels.ERROR)
         return
       end
 
       output = vim.fn.system(
-        "cd " .. vim.fn.shellescape(plugin_dir)
-          .. " && npm install markdown-it-mark --no-save --legacy-peer-deps 2>&1"
+        "cd " .. vim.fn.shellescape(plugin_dir) .. " && npm install markdown-it-mark --no-save --legacy-peer-deps 2>&1"
       )
       if vim.v.shell_error ~= 0 then
-        vim.notify(
-          "markdown-preview: markdown-it-mark 安装失败\n" .. output,
-          vim.log.levels.ERROR
-        )
+        vim.notify("markdown-preview: markdown-it-mark 安装失败\n" .. output, vim.log.levels.ERROR)
         return
       end
 
       -- Step 2: 修改 index.jsx，添加 import + .use()
       if vim.fn.filereadable(idx_file) ~= 1 then
-        vim.notify(
-          "markdown-preview: 未找到 app/pages/index.jsx，补丁失败",
-          vim.log.levels.ERROR
-        )
+        vim.notify("markdown-preview: 未找到 app/pages/index.jsx，补丁失败", vim.log.levels.ERROR)
         return
       end
 
@@ -99,32 +87,28 @@ return {
       if import_ok and use_ok then
         vim.fn.writefile(new_lines, idx_file)
       else
-        vim.notify(
-          "markdown-preview: index.jsx 结构不匹配，补丁失败",
-          vim.log.levels.ERROR
-        )
+        vim.notify("markdown-preview: index.jsx 结构不匹配，补丁失败", vim.log.levels.ERROR)
         return
       end
 
       -- Step 3: 重新构建 Next.js 静态导出
       -- NODE_OPTIONS: Node>=17 需要 openssl-legacy-provider 以兼容 Next.js 7 的 webpack
       local next_bin = plugin_dir .. "/node_modules/.bin/next"
-      local build_cmd = "cd " .. vim.fn.shellescape(app_dir)
+      local build_cmd = "cd "
+        .. vim.fn.shellescape(app_dir)
         .. " && rm -rf .next out"
-        .. " && NODE_OPTIONS=--openssl-legacy-provider " .. next_bin .. " build 2>&1"
-        .. " && NODE_OPTIONS=--openssl-legacy-provider " .. next_bin .. " export 2>&1"
+        .. " && NODE_OPTIONS=--openssl-legacy-provider "
+        .. next_bin
+        .. " build 2>&1"
+        .. " && NODE_OPTIONS=--openssl-legacy-provider "
+        .. next_bin
+        .. " export 2>&1"
 
-      vim.notify(
-        "markdown-preview: 正在构建预览页面...",
-        vim.log.levels.INFO
-      )
+      vim.notify("markdown-preview: 正在构建预览页面...", vim.log.levels.INFO)
 
       output = vim.fn.system(build_cmd)
       if vim.v.shell_error ~= 0 then
-        vim.notify(
-          "markdown-preview: next build 失败\n" .. output,
-          vim.log.levels.ERROR
-        )
+        vim.notify("markdown-preview: next build 失败\n" .. output, vim.log.levels.ERROR)
         return
       end
 
@@ -142,7 +126,7 @@ return {
 
       local function set_css()
         local cwd = vim.fn.getcwd()
-        local css = cwd .. "/.crossnote/style.css"
+        local css = cwd .. "/.config/style.css"
 
         if vim.fn.filereadable(css) == 1 then
           vim.g.mkdp_markdown_css = css
