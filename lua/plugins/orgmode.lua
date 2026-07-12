@@ -8,6 +8,9 @@ return {
       require("orgmode").setup({
         org_agenda_files = { "~/org/**/*.org", "~/stuff/MyNote/*.org" },
         org_default_notes_file = "~/org/notes.org",
+        -- 归档位置：%d 替换为 .org 文件的直接父目录名
+        -- 例：~/org/2026/July.org -> ~/org/archived/2026.org_archive
+        org_archive_location = "~/org/archived/%d.org_archive",
         org_capture_templates = {
           t = {
             description = "Task",
@@ -28,8 +31,8 @@ return {
         org_priority_lowest = "C",
         org_todo_keyword_faces = {
           TODO = ":foreground #D2442D :weight bold",
-          NEXT = ":foreground #195591 :weight bold",
-          WAIT = ":foreground #a1551a :weight bold",
+          NEXT = ":foreground #7aa2f7 :weight bold",
+          WAIT = ":foreground #c96f4f :weight bold",
           DONE = ":foreground #288002 :weight bold",
           CANCELLED = ":foreground #a0aaaa :weight bold",
         },
@@ -82,6 +85,20 @@ return {
           },
         },
       })
+
+      -- Monkey-patch parse_archive_location 以支持 %d 占位符
+      -- %d = .org 文件所在的直接父目录名
+      -- 例：~/org/2026/July.org 中 %d = "2026"
+      local org_config = require("orgmode.config")
+      local orig_parse = org_config.parse_archive_location
+
+      org_config.parse_archive_location = function(self, file, archive_loc)
+        archive_loc = archive_loc or self.opts.org_archive_location
+        -- 替换 %d 为当前文件所在目录名（如 2026/July.org -> "2026"）
+        local parent_dir = vim.fn.fnamemodify(file, ":h:t")
+        archive_loc = archive_loc:gsub("%%d", parent_dir)
+        return orig_parse(self, file, archive_loc)
+      end
     end,
   },
 }

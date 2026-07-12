@@ -24,7 +24,7 @@ return {
 
         -- 暖色系 · Warm tones
         brown = "#DCB48C", -- 焦糖 / 状态栏底色
-        gold = "#A1551A", -- 橄榄金 / 行号 / 参数
+        gold = "#c96f4f", -- 橄榄金 / 行号 / 参数
         paleyellow = "#ffee99", -- 淡鹅黄 / 选区 / Normal 模式
         summerorange = "#ffa488", -- 夏日橘 / 成员字段 / Terminal 模式
 
