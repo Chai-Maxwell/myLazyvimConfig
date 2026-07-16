@@ -42,8 +42,8 @@ return {
               if not confirmed then
                 return
               end
-              -- macOS: use osascript to move file/folder to trash
-              local trash_cmd = { "osascript", "-e", string.format('tell app "Finder" to delete POSIX file %q', path) }
+              -- 移到系统回收站（macOS: Finder, Linux: Dolphin/kioclient）
+              local trash_cmd = require("config.platform").trash_cmd(path)
               vim.fn.jobstart(trash_cmd, {
                 detach = true,
                 on_exit = function()
@@ -77,8 +77,9 @@ return {
           handler = function(args)
             local filepath = args.path
             if filepath and filepath:match("%.pdf$") then
-              -- 用 macOS 的 open 命令调用预览打开 PDF
-              vim.fn.jobstart({ "open", filepath }, { detach = true })
+              -- 用系统默认应用打开 PDF（而非在 neovim 中打开）
+              local platform = require("config.platform")
+              vim.fn.jobstart(platform.open_file(filepath), { detach = true })
               -- 阻止 neovim 默认打开行为
               return { handled = true }
             end
@@ -88,18 +89,6 @@ return {
     },
     config = function(_, opts)
       require("neo-tree").setup(opts)
-      vim.api.nvim_create_user_command("OpenInFinder", function()
-        -- 优先获取 neo-tree 浏览的根目录，否则用当前工作目录
-        local path = vim.fn.getcwd()
-        local ok, manager = pcall(require, "neo-tree.sources.manager")
-        if ok then
-          local state = manager.get_state("filesystem")
-          if state and state.path then
-            path = state.path
-          end
-        end
-        vim.fn.jobstart({ "open", path }, { detach = true })
-      end, { desc = "在访达中打开当前工作目录" })
     end,
   },
 }

@@ -13,12 +13,38 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function()
     local bufnr = vim.api.nvim_get_current_buf()
     local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+    local text = table.concat(lines, "\n")
+
+    -- ============================================================
+    -- 提前退出：如果缓冲区不包含任何快捷语法，跳过全部处理
+    --   避免对普通 .md 文件做无意义的正则匹配
+    -- ============================================================
+    local has_figure = text:find("figure%[")
+    local has_katex_macros = text:find("\\Var")
+      or text:find("\\Cov")
+      or text:find("\\diag")
+      or text:find("\\upd")
+      or text:find("\\upg")
+      or text:find("\\upe")
+      or text:find("\\upi")
+      or text:find("\\leftBrace")
+      or text:find("\\rightEnd")
+      -- 注意：\\par 不检查，避免误匹配 LaTeX 命令（如 \\parallel）
+      or text:find("\\part%s*{") -- 精确匹配 \\part{..}{..} 快捷方式，避免误匹配 \\partial
+      or text:find("\\deri")
+      or text:find("\\dbm")
+      or text:find("\\ddbm")
+      or text:find("\\partSec%s*{")
+      or text:find("\\delt%s*{") -- 精确匹配 \\delt{..}{..}，避免误匹配 \\delta
+
+    if not has_figure and not has_katex_macros then
+      return -- 无需处理，直接返回
+    end
 
     -- ============================================================
     -- Step 1: figure[(path)(caption)[(size)]] → <figure> HTML
     --   Runs on full buffer text (1 line shorthand → 4 lines HTML)
     -- ============================================================
-    local text = table.concat(lines, "\n")
     local figure_modified = false
 
     local function normalize_size(s)
@@ -28,39 +54,41 @@ vim.api.nvim_create_autocmd("BufWritePre", {
       return s
     end
 
-    -- 3-arg: figure[(path)(caption)(size)]
-    local new_text, n3 = text:gsub(
-      "figure%[%(([^)]*)%)%(([^)]*)%)%(([^)]*)%)%]",
-      function(path, caption, size)
-        figure_modified = true
-        size = normalize_size(size)
-        if size then
-          return string.format(
-            '<figure class="image-round" style="--image-width:%s%%">\n  <img src="%s">\n  <figcaption>%s</figcaption>\n</figure>',
-            size, path, caption
-          )
-        else
+    if has_figure then
+      -- 3-arg: figure[(path)(caption)(size)]
+      local new_text, n3 = text:gsub(
+        "figure%[%(([^)]*)%)%(([^)]*)%)%(([^)]*)%)%]",
+        function(path, caption, size)
+          figure_modified = true
+          size = normalize_size(size)
+          if size then
+            return string.format(
+              '<figure class="image-round" style="--image-width:%s%%">\n  <img src="%s">\n  <figcaption>%s</figcaption>\n</figure>',
+              size, path, caption
+            )
+          else
+            return string.format(
+              '<figure class="image-round">\n  <img src="%s">\n  <figcaption>%s</figcaption>\n</figure>',
+              path, caption
+            )
+          end
+        end
+      )
+      if n3 > 0 then text = new_text end
+
+      -- 2-arg: figure[(path)(caption)]
+      local new_text2, n2 = text:gsub(
+        "figure%[%(([^)]*)%)%(([^)]*)%)%]",
+        function(path, caption)
+          figure_modified = true
           return string.format(
             '<figure class="image-round">\n  <img src="%s">\n  <figcaption>%s</figcaption>\n</figure>',
             path, caption
           )
         end
-      end
-    )
-    if n3 > 0 then text = new_text end
-
-    -- 2-arg: figure[(path)(caption)]
-    local new_text2, n2 = text:gsub(
-      "figure%[%(([^)]*)%)%(([^)]*)%)%]",
-      function(path, caption)
-        figure_modified = true
-        return string.format(
-          '<figure class="image-round">\n  <img src="%s">\n  <figcaption>%s</figcaption>\n</figure>',
-          path, caption
-        )
-      end
-    )
-    if n2 > 0 then text = new_text2; figure_modified = true end
+      )
+      if n2 > 0 then text = new_text2; figure_modified = true end
+    end
 
     if figure_modified then
       lines = vim.split(text, "\n", { plain = true })
@@ -69,6 +97,14 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     -- ============================================================
     -- Step 2: KaTeX macro substitution (line-by-line)
     -- ============================================================
+    if not has_katex_macros then
+      -- 没有宏需要展开，但 figure 可能已修改文本，需更新缓冲区
+      if figure_modified then
+        vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+      end
+      return
+    end
+
     local new_lines = {}
     local in_code_block = false
 
@@ -123,13 +159,13 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
--- 用 macOS 访达打开当前工作文件夹
+-- 用系统文件管理器打开当前工作文件夹（macOS: Finder, Linux: Dolphin）
 vim.api.nvim_create_user_command("OpenInFolder", function()
-  vim.fn.jobstart({ "open", vim.fn.getcwd() }, { detach = true })
+  local platform = require("config.platform")
+  vim.fn.jobstart(platform.open_folder(vim.fn.getcwd()), { detach = true })
 end, {})
 
--- 图片文件 → 交给 macOS 预览.app 打开，终端和 Neovide 通用
--- （与 neo-tree 中 PDF 的处理方式一致）
+-- 图片文件 → 交给系统默认查看器打开（与 neo-tree 中 PDF 的处理方式一致）
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "*.{png,jpg,jpeg,gif,bmp,webp,tiff,svg,heic,ico}",
   callback = function()
@@ -137,8 +173,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
     if file == "" then
       return
     end
-    -- 用 macOS 预览打开
-    vim.fn.jobstart({ "open", file }, { detach = true })
+    -- 用系统默认应用打开图片
+    local platform = require("config.platform")
+    vim.fn.jobstart(platform.open_file(file), { detach = true })
     -- 关闭当前 buffer，切回上一个
     vim.cmd("bdelete")
   end,

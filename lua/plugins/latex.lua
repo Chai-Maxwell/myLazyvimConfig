@@ -31,8 +31,8 @@ return {
       },
       formatters = {
         latexindent = {
-          -- 使用 Homebrew 安装的版本（TeX Live 自带版缺少 Perl 依赖会崩溃）
-          command = "/opt/homebrew/bin/latexindent",
+          -- macOS 优先使用 Homebrew 安装的版本，否则用 PATH 中的
+          command = require("config.platform").latexindent_cmd(),
         },
       },
     },

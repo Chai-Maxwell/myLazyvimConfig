@@ -11,12 +11,8 @@ return {
       opts.formatters_by_ft["markdown"] = { "markdownlint-cli2", "markdown-toc" }
       opts.formatters_by_ft["markdown.mdx"] = { "markdownlint-cli2", "markdown-toc" }
 
-      -- 总是运行 markdownlint-cli2，不再依赖已有的诊断
-      opts.formatters = opts.formatters or {}
-      opts.formatters["markdownlint-cli2"] = opts.formatters["markdownlint-cli2"] or {}
-      opts.formatters["markdownlint-cli2"].condition = function()
-        return true
-      end
+      -- markdownlint-cli2 由 nvim-lint 诊断触发，不再无条件运行
+      -- （恢复 LazyVim 默认行为：仅当缓冲区已有 markdownlint 诊断时才格式化）
     end,
   },
 }

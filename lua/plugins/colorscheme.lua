@@ -312,7 +312,7 @@ return {
           hl.CmpItemKindSnippet = fg(colors.dark)
           hl.CmpItemKindColor = fg(colors.red)
           hl.CmpItemKindFile = fg(colors.fg)
-          hl.CmpItemKindFolder = fg(colors.paleyellow)
+          hl.CmpItemKindFolder = fg(colors.gold)
           hl.CmpItemKindUnit = fg(colors.gold)
           hl.CmpItemKindValue = fg(colors.fg)
           hl.CmpItemKindEnumMember = fg(colors.summerorange)
@@ -370,13 +370,13 @@ return {
           hl.NeoTreeFileNameOpened = fg(colors.brown)
 
           -- Git 状态 — 图标 + 文件名染色
-          hl.NeoTreeGitAdded = fg(colors.paleyellow)
+          hl.NeoTreeGitAdded = fg(colors.gold)
           hl.NeoTreeGitModified = fg(colors.yellow)
           hl.NeoTreeGitDeleted = fg(colors.red)
           hl.NeoTreeGitConflict = fg(colors.red)
           hl.NeoTreeGitUntracked = fg(colors.info)
           hl.NeoTreeGitRenamed = fg(colors.yellow)
-          hl.NeoTreeGitStaged = fg(colors.paleyellow)
+          hl.NeoTreeGitStaged = fg(colors.gold)
           hl.NeoTreeGitUnstaged = fg(colors.brown)
           hl.NeoTreeGitIgnored = fg(colors.subtle)
           hl.NeoTreeModified = fg(colors.yellow)
@@ -481,7 +481,7 @@ return {
           hl.LazyButton = { fg = colors.fg, bg = colors.brown }
           hl.LazyButtonActive = select()
           hl.LazyReasonPlugin = fg(colors.paleblue)
-          hl.LazyProgressDone = fg(colors.paleyellow)
+          hl.LazyProgressDone = fg(colors.gold)
           hl.LazyProgressTodo = fg(colors.subtle)
 
           -- ╔════════════════════════════════════════════════════════╗
@@ -499,7 +499,7 @@ return {
           hl.TroubleNormal = bg_none()
           hl.TroubleCount = fg(colors.brown)
           hl.TroubleLocation = fg(colors.subtle)
-          hl.TroubleFoldIcon = fg(colors.paleyellow)
+          hl.TroubleFoldIcon = fg(colors.gold)
 
           -- ╔════════════════════════════════════════════════════════╗
           -- ║  U. Claude Code AI 对话侧边栏                          ║
@@ -507,7 +507,7 @@ return {
           hl.ClaudeBorder = bg_none()
           hl.ClaudeInput = { fg = colors.fg, bg = colors.dark }
           hl.ClaudeUserMessage = { fg = colors.fg, bg = colors.brown }
-          hl.ClaudeThinking = { fg = colors.paleyellow, italic = true }
+          hl.ClaudeThinking = { fg = colors.gold, italic = true }
 
           -- ╔════════════════════════════════════════════════════════╗
           -- ║  V. Mini 系列插件                                      ║
@@ -579,7 +579,7 @@ return {
           hl.TodoBgHACK = bg_none()
           hl.TodoFgWARN = fg(colors.yellow)
           hl.TodoBgWARN = bg_none()
-          hl.TodoFgPERF = fg(colors.paleyellow)
+          hl.TodoFgPERF = fg(colors.gold)
           hl.TodoBgPERF = bg_none()
           hl.TodoFgNOTE = fg(colors.info)
           hl.TodoBgNOTE = bg_none()
@@ -589,10 +589,10 @@ return {
           -- ╔════════════════════════════════════════════════════════╗
           -- ║  Z. Flash.nvim 跳转导航                                ║
           -- ╚════════════════════════════════════════════════════════╝
-          hl.FlashLabel = { fg = colors.dark, bg = colors.paleyellow, bold = true }
+          hl.FlashLabel = { fg = colors.dark, bg = colors.gold, bold = true }
           hl.FlashBackdrop = fg(colors.subtle)
           hl.FlashMatch = { bg = colors.brown }
-          hl.FlashCurrent = { bg = colors.paleyellow }
+          hl.FlashCurrent = { bg = colors.gold }
 
           -- ╔════════════════════════════════════════════════════════╗
           -- ║  AA. Dressing.nvim 输入框美化                          ║
@@ -612,8 +612,8 @@ return {
           -- ╚════════════════════════════════════════════════════════╝
           hl.NeogitNormal = bg_none()
           hl.NeogitBorder = bg_none()
-          hl.NeogitSectionHeader = fg_bold(colors.gold)
-          hl.NeogitDiffAdd = fg(colors.paleyellow)
+          hl.NeogitSectionHeader = fg_bold(colors.blue)
+          hl.NeogitDiffAdd = fg(colors.gold)
           hl.NeogitDiffDelete = fg(colors.red)
 
           -- ╔════════════════════════════════════════════════════════╗
@@ -635,7 +635,7 @@ return {
           hl.DapBreakpointCondition = fg(colors.yellow)
           hl.DapBreakpointRejected = fg(colors.subtle)
           hl.DapLogPoint = fg(colors.info)
-          hl.DapStopped = fg(colors.paleyellow)
+          hl.DapStopped = fg(colors.gold)
           hl.DapUIVariable = fg(colors.fg)
           hl.DapUIValue = fg(colors.gold)
 
