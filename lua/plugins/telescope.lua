@@ -12,6 +12,12 @@
 return {
   {
     "nvim-telescope/telescope.nvim",
+    keys = {
+      { "<leader>be", function() require("telescope.builtin").buffers() end, desc = "Buffers" },
+      { "<leader>ge", function() require("telescope.builtin").git_status() end, desc = "Git Status" },
+      { "<leader>,", false },  -- 屏蔽 LazyVim 默认的 buffers 键位
+      { "<leader>gs", false }, -- 屏蔽 LazyVim 默认的 git_status，已有 Fugitive
+    },
     opts = {
       extensions = {
         -- telescope-project.nvim 的扩展配置

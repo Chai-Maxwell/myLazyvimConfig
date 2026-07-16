@@ -256,7 +256,7 @@ return {
     -- ╚══════════════════════════════════════════════════════════════╝
     opts.extensions = {
       "fugitive", -- vim-fugitive git 操作
-      "neo-tree", -- 文件树（同步状态栏颜色）
+      -- neo-tree 已移除：其 statusline 会继承 lualine 的分隔符，造成视觉污染
       "trouble", -- 诊断列表
       "lazy", -- 插件管理
       "mason", -- LSP 安装器

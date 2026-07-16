@@ -1,6 +1,7 @@
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
+    enabled = false, -- 已用 telescope 替代
     opts = {
       clipboard = {
         sync = "universal", -- 跨所有 Neovim 实例共享剪贴板（cut/copy/paste 文件操作）
