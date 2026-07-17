@@ -381,6 +381,13 @@ return {
           hl.NeoTreeGitIgnored = fg(colors.subtle)
           hl.NeoTreeModified = fg(colors.yellow)
 
+          -- Oil Git — 文件管理器 git 状态高亮（与 NeoTree 配色一致）
+          hl.OilGitAdded = fg(colors.gold)
+          hl.OilGitModified = fg(colors.yellow)
+          hl.OilGitRenamed = fg(colors.yellow)
+          hl.OilGitUntracked = fg(colors.info)
+          hl.OilGitIgnored = fg(colors.subtle)
+
           -- ╔════════════════════════════════════════════════════════╗
           -- ║  K. BufferLine 缓冲区标签                              ║
           -- ╚════════════════════════════════════════════════════════╝

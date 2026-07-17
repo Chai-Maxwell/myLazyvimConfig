@@ -64,5 +64,6 @@ return {
   },
   dependencies = {
     { "nvim-mini/mini.icons", opts = {} },
+    { "benomahony/oil-git.nvim", opts = {} },
   },
 }
