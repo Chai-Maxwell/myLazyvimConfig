@@ -159,7 +159,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
--- 用系统文件管理器打开当前工作文件夹（macOS: Finder, Linux: Dolphin）
+-- 用系统文件管理器打开当前工作文件夹（macOS: Finder, Linux: xdg-open）
 vim.api.nvim_create_user_command("OpenInFolder", function()
   local platform = require("config.platform")
   vim.fn.jobstart(platform.open_folder(vim.fn.getcwd()), { detach = true })
