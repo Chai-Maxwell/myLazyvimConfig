@@ -216,3 +216,11 @@ vim.api.nvim_create_autocmd("BufEnter", {
     vim.cmd("bdelete")
   end,
 })
+
+-- rainbow braces：.tex 同级花括号同色（转义 \{\} 与注释内括号由解析器天然排除）
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "tex", "latex" },
+  callback = function(ev)
+    require("config.rainbow_braces").attach(ev.buf)
+  end,
+})
