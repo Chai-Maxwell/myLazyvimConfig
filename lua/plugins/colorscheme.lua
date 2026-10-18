@@ -199,10 +199,10 @@ return {
           hl["@punctuation.special"] = fg(colors.gold)
 
           -- rainbow braces（LaTeX 花括号层级着色，三色循环，最内层为深草绿）
-          hl.RainbowBrace1 = fg("#a8a244")
-          hl.RainbowBrace2 = fg("#eCB48c")
-          hl.RainbowBrace3 = fg("#9dd6b8")
-          hl.RainbowBrace4 = fg("#c96f4f")
+          hl.RainbowBrace1 = fg("#a0aaaa")
+          hl.RainbowBrace2 = fg("#0e3ee8")
+          hl.RainbowBrace3 = fg("#40e6b8")
+          hl.RainbowBrace4 = fg("#e96f4f")
 
           -- 标签（HTML/JSX/Vue）
           hl["@tag"] = fg(colors.blue)
